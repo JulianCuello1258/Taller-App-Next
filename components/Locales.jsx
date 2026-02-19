@@ -3,6 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { URL } from '../api/api';
+import Reviews from './Reviews';
 
 export default function Locales() {
 
@@ -47,7 +48,10 @@ export default function Locales() {
     useEffect(() => {
         const fetchLocales = async () => {
             try {
-                const response = await fetch(`${URL}api/locals`);
+                const response = await fetch(`${URL}api/locals`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" }
+                });
                 const data = await response.json();
                 setLocales(data);
                 setLocales(data.items);
@@ -61,45 +65,51 @@ export default function Locales() {
     return (
         <>
             <h1 className="d-flex justify-content-center">Locales</h1>
-            <div style={{ display: "flex", gap: "1rem" }} className="d-flex justify-content-center">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center" }}>
                 {locales.map((local) => (
-                    <Card key={local.id} style={{ width: '18rem' }}>
-                        <Card.Img
-                            variant="top"
-                            src={local.image || "https://picsum.photos/300/200"}
-                        />
+                    <div key={local.id} style={{ display: "flex", gap: "1rem", flexShrink: 0 }}>
+                        <Card style={{ width: '18rem' }}>
+                            <Card.Img
+                                variant="top"
+                                src={local.image || "https://picsum.photos/300/200"}
+                            />
 
-                        <Card.Body>
-                            <Card.Title>{local.name}</Card.Title>
-                            <Card.Text>
-                                Rango de Precios: {local.priceRange}
-                            </Card.Text>
-                        </Card.Body>
+                            <Card.Body>
+                                <Card.Title>{local.name}</Card.Title>
+                                <Card.Text>
+                                    Rango de Precios: {local.priceRange}
+                                </Card.Text>
+                            </Card.Body>
 
-                        <ListGroup className="list-group-flush">
-                            <ListGroup.Item>
-                                Categoría: {local.type}
-                                <br />
-                                Ciudad: {local.city}
-                                <br />
-                                Zona: {local.zone}
-                            </ListGroup.Item>
-                        </ListGroup>
+                            <ListGroup className="list-group-flush">
+                                <ListGroup.Item>
+                                    Categoría: {local.type}
+                                    <br />
+                                    Ciudad: {local.city}
+                                    <br />
+                                    Zona: {local.zone}
+                                </ListGroup.Item>
+                            </ListGroup>
 
-                        <ListGroup className="list-group-flush">
-                            <ListGroup.Item>
-                                Horarios: {local.hours}
-                                <br />
-                                Dirección: {local.address}
-                            </ListGroup.Item>
-                        </ListGroup>
+                            <ListGroup className="list-group-flush">
+                                <ListGroup.Item>
+                                    Horarios: {local.hours}
+                                    <br />
+                                    Dirección: {local.address}
+                                </ListGroup.Item>
+                            </ListGroup>
 
-                        <Card.Body>
-                            <button style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.25rem' }} href="#">
-                                Encargar
-                            </button>
-                        </Card.Body>
-                    </Card>
+                            <Card.Body>
+                                <button style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.25rem' }} href="#">
+                                    Encargar
+                                </button>
+                            </Card.Body>
+                        </Card>
+
+                        <div style={{ width: '20rem', flexShrink: 0 }}>
+                            <Reviews localId={local.id} />
+                        </div>
+                    </div>
                 ))}
             </div>
         </>

@@ -3,6 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { URL } from '../api/api';
+import Reviews from './Reviews';
 
 export default function Platos() {
 
@@ -16,7 +17,10 @@ export default function Platos() {
     useEffect(() => {
         const fetchPlatos = async () => {
             try {
-                const response = await fetch(`${URL}api/dishes`);
+                const response = await fetch(`${URL}api/dishes`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" }
+                });
                 const data = await response.json();
                 setPlatos(data);
                 setPlatos(data.items);
@@ -31,44 +35,50 @@ export default function Platos() {
     return (
         <>
             <h1 className="d-flex justify-content-center" >Platos</h1>
-            <div style={{ display: "flex", gap: "1rem" }} className="d-flex justify-content-center">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center" }}>
                 {platos.map((plato) => (
-                    <Card key={plato.id} style={{ width: '18rem' }}>
-                        <Card.Img
-                            variant="top"
-                            src={plato.image || "https://picsum.photos/300/200"}
-                        />
+                    <div key={plato.id} style={{ display: "flex", gap: "1rem", flexShrink: 0 }}>
+                        <Card style={{ width: '18rem' }}>
+                            <Card.Img
+                                variant="top"
+                                src={plato.image || "https://picsum.photos/300/200"}
+                            />
 
-                        <Card.Body>
-                            <Card.Title>{plato.name}</Card.Title>
-                            <Card.Text>
-                                {plato.description}
-                            </Card.Text>
-                        </Card.Body>
+                            <Card.Body>
+                                <Card.Title>{plato.name}</Card.Title>
+                                <Card.Text>
+                                    {plato.description}
+                                </Card.Text>
+                            </Card.Body>
 
-                        <ListGroup className="list-group-flush">
-                            <ListGroup.Item>
-                                Categoría: {plato.category}
-                                <br />
-                                Ciudad: {plato.city}
-                            </ListGroup.Item>
-                        </ListGroup>
+                            <ListGroup className="list-group-flush">
+                                <ListGroup.Item>
+                                    Categoría: {plato.category}
+                                    <br />
+                                    Ciudad: {plato.city}
+                                </ListGroup.Item>
+                            </ListGroup>
 
-                        <ListGroup className="list-group-flush">
-                            <ListGroup.Item>
-                                Precio: ${plato.price}
-                            </ListGroup.Item>
-                        </ListGroup>
+                            <ListGroup className="list-group-flush">
+                                <ListGroup.Item>
+                                    Precio: ${plato.price}
+                                </ListGroup.Item>
+                            </ListGroup>
 
-                        <br />
-                        <br />
+                            <br />
+                            <br />
 
-                        <Card.Body>
-                            <button style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.25rem' }} href="#">
-                                Comprar
-                            </button>
-                        </Card.Body>
-                    </Card>
+                            <Card.Body>
+                                <button style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.25rem' }} href="#">
+                                    Comprar
+                                </button>
+                            </Card.Body>
+                        </Card>
+
+                        <div style={{ width: '20rem', flexShrink: 0 }}>
+                            <Reviews dishId={plato.id} />
+                        </div>
+                    </div>
                 ))}
             </div>
             <br />

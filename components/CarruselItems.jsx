@@ -25,6 +25,7 @@ export default function CarruselItems() {
         }
     ];
   return (
+    <>
     <Carousel>
       {items.map((item) => (
         <Carousel.Item key={item.id}>
@@ -40,5 +41,6 @@ export default function CarruselItems() {
         </Carousel.Item>
       ))}
     </Carousel>
+    </>
   );
 }

@@ -1,21 +1,6 @@
 const URL = "https://api-react-taller-production.up.railway.app/"
 
-export {URL};
-
-// Función para registrar un nuevo usuario
-
-const register = async (username, name, password) => {
-    const response = await fetch(`${URL}api/auth/register`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ username, name, password })
-    });
-
-    const data = await response.json();
-    console.log("Información de Registro:", data);    
-}
-
-export { register }
+export { URL };
 
 // Metodos
 // Get - No precisa cuerpo, se envían los datos por la URL
@@ -24,7 +9,24 @@ export { register }
 // DELETE - Precisa cuerpo, se envían los datos por la URL para identificar el recurso a eliminar
 
 
-// Función para iniciar sesión
+const register = async (username, name, password) => {
+  const response = await fetch(`${URL}api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, name, password })
+  });
+
+  const data = await response.json();
+
+  // Guarda el usuario registrado
+  localStorage.setItem("user", JSON.stringify(data.user));
+  localStorage.setItem("token", data.token);
+
+  console.log("Información de Registro:", data);
+  return data;
+};
+
+export { register };
 
 const login = async (username, password) => {
   const response = await fetch(`${URL}api/auth/login`, {
@@ -38,7 +40,74 @@ const login = async (username, password) => {
   }
 
   const data = await response.json();
+
+  // Guarda el token y el usuario logueado
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
+
   return data;
 };
 
 export { login };
+
+const createLocalReview = async (localId, rating, comment) => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  await fetch(`${URL}api/locals/${localId}/reviews`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ rating, comment })
+  });
+
+  // Guarda la reseña en localStorage
+  const key = `reviews_local_${localId}`;
+  const existing = JSON.parse(localStorage.getItem(key)) || [];
+  existing.push({ id: Date.now(), rating, comment, user: user?.username });
+  localStorage.setItem(key, JSON.stringify(existing));
+};
+
+export { createLocalReview };
+
+const createPlatoReview = async (platoId, rating, commentario) => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  await fetch(`${URL}api/dishes/${platoId}/reviews`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ rating, commentario })
+  });
+
+  // Guarda la reseña en localStorage
+  const key = `reviews_dish_${platoId}`;
+  const existing = JSON.parse(localStorage.getItem(key)) || [];
+  existing.push({ id: Date.now(), rating, commentario, user: user?.username });
+  localStorage.setItem(key, JSON.stringify(existing));
+};
+
+export { createPlatoReview };
+
+// Leer desde localStorage
+export const getLocalReviews = (localId) => {
+  return JSON.parse(localStorage.getItem(`reviews_local_${localId}`)) || [];
+};
+
+export const getDishReviews = (platoId) => {
+  return JSON.parse(localStorage.getItem(`reviews_dish_${platoId}`)) || [];
+};
+
+export const getUsuario = () => {
+  return JSON.parse(localStorage.getItem("usuario")) || null;
+};
+
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("usuario");
+};
