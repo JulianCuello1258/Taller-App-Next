@@ -8,56 +8,64 @@ export default function Locales({ query, type, priceRange, rating, city, zone })
   useEffect(() => {
     const fetchLocales = async () => {
       try {
-        const data = await getLocals();
+        const data = await getLocals(query, type, priceRange, rating, city, zone);
         setLocales(data);
       } catch (error) {
         console.error("Error:", error);
       }
     };
     fetchLocales();
-  }, []);
-
-  const localesFiltrados = locales.filter((local) => {
-    const matchQuery = !query || local.name?.toLowerCase().includes(query.toLowerCase());
-    const matchType = !type || local.type === type;
-    const matchPrice = !priceRange || local.priceRange === priceRange;
-    const matchRating = !rating || local.rating >= Number(rating);
-    const matchCity = !city || local.city?.toLowerCase().includes(city.toLowerCase());
-    const matchZone = !zone || local.zone?.toLowerCase().includes(zone.toLowerCase());
-
-    return matchQuery && matchType && matchPrice && matchRating && matchCity && matchZone;
-  });
+  }, [query, type, priceRange, rating, city, zone]);
 
   return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Locales</h2>
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {localesFiltrados.map((local) => (
-            <div key={local.id} className="group relative flex flex-col h-full rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-              <Link href={`/VerLocal/${local.id}`}>
-                <img
-                  alt={local.name}
-                  src={local.photos?.[0] || "https://picsum.photos/300/200"}
-                  className="w-full h-48 object-cover"
-                />
-              </Link>
-              <div className="flex flex-col flex-1 p-4">
-                <div className="flex-1">
-                  <h3 className="text-sm font-medium text-gray-700">{local.name}</h3>
-                  <p className="mt-1 text-sm text-gray-500">{local.type} · {local.city}, {local.zone}</p>
-                  <p className="mt-1 text-sm text-gray-500 line-clamp-1">{local.address}</p>
-                  <p className="mt-1 text-sm text-gray-500">{local.hours}</p>
-                  <p className="mt-1 text-sm font-bold text-gray-900">{local.priceRange}</p>
+    <div className="bg-gray-50 text-gray-800 transition-colors duration-300">
+      <main className="max-w-7xl mx-auto w-full px-6 lg:px-20 py-12">
+
+        <div className="space-y-1">
+          <h1 className="text-gray-900 text-4xl font-extrabold tracking-tight"> Locales </h1>
+          <p className="text-gray-500 text-lg"> Descubre los mejores locales disponibles en tu zona. </p>
+        </div>
+
+        {/* CARD */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {locales.map((local) => (
+            <div key={local.id} className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300">
+              {/* FOTO */}
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Link href={`/VerLocal/${local.id}`}>
+                  <img
+                    alt={local.name}
+                    src={local.photos?.[0] || "/multimedia/Local_Sin_Imagen.png"}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </Link>
+              </div>
+
+              {/* CONTENIDO */}
+              <div className="p-6 flex flex-col flex-grow">
+                <div className="flex-grow">
+                  <h3 className="text-lg font-bold text-gray-800 mb-2"> {local.name} </h3>
+                  <p className="text-sm text-gray-500 mb-2"> {local.type} · {local.city}, {local.zone} </p>
+                  <p className="text-sm text-gray-500 line-clamp-1 mb-1"> {local.address} </p>
+                  <p className="text-sm text-gray-500 mb-3"> {local.hours} </p>
+                  {local.priceRange && (
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
+                      {local.priceRange}
+                    </span>
+                  )}
                 </div>
-                <button className="mt-4 w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
-                  Encargar
-                </button>
+
+                {/* PRECIO Y COMPRAR */}
+                <div className="mt-auto pt-4 flex flex-col gap-4">
+                  <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors shadow-md">
+                    Encargar Aquí
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

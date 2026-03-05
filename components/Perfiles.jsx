@@ -20,15 +20,14 @@ export default function Perfiles() {
 
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUserId(storedUser.id);
-      setInicial(storedUser.name?.charAt(0).toUpperCase() || '?');
+    const localStorageUser = JSON.parse(localStorage.getItem("user"));
+    if (localStorageUser) {
+      setUserId(localStorageUser.id);
+      setInicial(localStorageUser.name?.charAt(0).toUpperCase() || '?');
     }
 
     const fetchUser = async () => {
       const data = await getUser(params.id);
-      console.log(data);
       const fetched = {
         name: data.item.name || "",
         username: data.item.username || "",
@@ -57,20 +56,13 @@ export default function Perfiles() {
   return (
     <>
       <NavbarRutasSabor />
-      <AlertMessage
-        show={vrSuccessAlert}
-        onClose={() => setVrSuccessAlert(false)}
-        variant="success"
-        message="Perfil actualizado correctamente"
-        duration={5000}
-      />
+      <AlertMessage show={vrSuccessAlert} onClose={() => setVrSuccessAlert(false)} variant="success" message="Perfil actualizado correctamente" duration={5000} />
 
-      <div className="min-h-screen flex items-center justify-center p-6" style={{ backgroundColor: '#111827' }}>
-        <div className="w-full max-w-4xl rounded-2xl shadow-xl p-8" style={{ backgroundColor: '#1f2937' }}>
-
+      <div className="min-h-screen flex items-center justify-center p-6 bg-gray-100">
+        <div className="w-full max-w-4xl rounded-2xl shadow-lg p-8 bg-white border border-gray-200">
           <div className="flex flex-col md:flex-row items-center gap-6">
 
-            <div className="w-32 h-32 rounded-full border-4 border-indigo-500 shadow-md flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-indigo-500 transition">
+            <div className="w-32 h-32 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm transition">
               <h1>{inicial}</h1>
             </div>
 
@@ -83,118 +75,121 @@ export default function Perfiles() {
                     value={editUser.name}
                     onChange={handleChange}
                     placeholder="Nombre"
-                    className="w-full mb-3 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/5 text-white placeholder:text-gray-500 outline outline-1 outline-white/10"
+                    className="w-full mb-3 p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400"
                   />
+
                   <input
                     type="text"
                     name="username"
                     value={editUser.username}
                     onChange={handleChange}
                     placeholder="Usuario"
-                    className="w-full mb-3 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/5 text-white placeholder:text-gray-500 outline outline-1 outline-white/10"
+                    className="w-full mb-3 p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400"
                   />
+
                   <input
                     type="email"
                     name="email"
                     value={editUser.email}
                     onChange={handleChange}
                     placeholder="Email"
-                    className="w-full mb-3 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/5 text-white placeholder:text-gray-500 outline outline-1 outline-white/10"
+                    className="w-full mb-3 p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400"
                   />
+
                   <input
                     type="text"
                     name="role"
                     value={editUser.role}
                     onChange={handleChange}
                     placeholder="Rol"
-                    className="w-full mb-3 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/5 text-white placeholder:text-gray-500 outline outline-1 outline-white/10"
+                    className="w-full mb-3 p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400"
                   />
+
                   <textarea
                     name="bio"
                     value={editUser.bio}
                     onChange={handleChange}
                     placeholder="Bio"
-                    className="w-full mb-3 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/5 text-white placeholder:text-gray-500 outline outline-1 outline-white/10"
+                    className="w-full mb-3 p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400"
                   />
+
                   <div className="flex gap-3">
-                    <button
-                      onClick={handleGuardar}
-                      className="bg-indigo-500 hover:bg-indigo-400 text-white px-5 py-2 rounded-lg transition"
-                    > Guardar Cambios </button>
-                    <button
-                      onClick={() => { setEditMode(false); setEditUser(user); }}
-                      className="bg-white/10 hover:bg-white/20 text-gray-300 px-5 py-2 rounded-lg transition"
-                    > Cancelar </button>
+                    <button onClick={handleGuardar} className="bg-indigo-500 hover:bg-indigo-400 text-white px-5 py-2 rounded-lg transition">
+                      Guardar Cambios
+                    </button>
+
+                    <button onClick={() => { setEditMode(false); setEditUser(user); }} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-lg transition">
+                      Cancelar
+                    </button>
                   </div>
                 </>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold text-white">{user.name}</h2>
-                  <p className="text-gray-400">@{user.username}</p>
-                  <p className="text-gray-400">{user.email}</p>
-                  <p className="mt-1 inline-block bg-indigo-900 text-indigo-300 px-3 py-1 rounded-full text-sm"> {user.role} </p>
-                  <p className="mt-4 text-gray-300">{user.bio}</p>
-                  <button
-                    onClick={() => setEditMode(true)}
-                    className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white px-5 py-2 rounded-lg transition"
-                  > Editar Perfil </button>
+                  <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
+                  <p className="text-gray-500">@{user.username}</p>
+                  <p className="text-gray-500">{user.email}</p>
+                  <p className="mt-1 inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm"> {user.role} </p>
+                  <p className="mt-4 text-gray-700">{user.bio}</p>
+                  <button onClick={() => setEditMode(true)} className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white px-5 py-2 rounded-lg transition">
+                    Editar Perfil
+                  </button>
                 </>
               )}
             </div>
           </div>
 
-          {/* Locales */}
+          {/* LOCALES */}
           <div className="mt-10">
-            <h2 className="text-2xl font-bold tracking-tight text-white"> Locales de {user.name} </h2>
-            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+            <h2 className="text-2xl font-bold tracking-tight text-gray-900"> Locales de {user.name} </h2>
+            <br />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {locals.map((local) => (
-                <div key={local.id} className="group relative">
-                  <img
-                    alt={local.name}
-                    src={local.photos ? local.photos[0] : "https://img.freepik.com/vector-gratis/apoye-concepto-negocio-local_23-2148592675.jpg"}
-                    className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-                  />
-                  <div className="mt-4 flex justify-between">
-                    <div>
-                      <Link href={`/VerLocal/${local.id}`} className="text-white font-medium hover:underline">
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {local.name}
-                      </Link>
-                      <p className="mt-1 text-sm text-gray-400">{local.type}</p>
+                <Link key={local.id} href={`/VerLocal/${local.id}`} className="block">
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer h-[340px] flex flex-col">
+                    <div className="h-44 w-full overflow-hidden">
+                      <img
+                        src={local.photos?.[0] || "/multimedia/Local_Sin_Imagen.png"}
+                        alt={local.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                    <p className="text-sm font-medium text-gray-300">{local.city}</p>
+                    <div className="p-4 flex flex-col flex-1">
+                      <h3 className="text-lg font-bold text-gray-900 line-clamp-1"> {local.name} </h3>
+                      <p className="text-sm text-gray-500 mt-1 line-clamp-1"> {local.type} </p>
+                      <p className="text-sm text-gray-500 line-clamp-1"> {local.city} </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
 
-          {/* Platos */}
+          {/* PLATOS */}
           <div className="mt-10">
-            <h2 className="text-2xl font-bold tracking-tight text-white">Platos de {user.name}</h2>
-            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+            <h2 className="text-2xl font-bold tracking-tight text-gray-900"> Platos de {user.name} </h2>
+            <br />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {platos.map((plato) => (
-                <div key={plato.id} className="group relative">
-                  <img
-                    alt={plato.name}
-                    src={plato.photos ? plato.photos[0] : "https://img.freepik.com/vector-gratis/apoye-concepto-negocio-local_23-2148592675.jpg"}
-                    className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-                  />
-                  <div className="mt-4 flex justify-between">
-                    <div>
-                      <Link href={`/VerPlato/${plato.id}`} className="text-white font-medium hover:underline">
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {plato.name}
-                      </Link>
-                      <p className="mt-1 text-sm text-gray-400">{plato.category}</p>
+                <Link key={plato.id} href={`/VerPlato/${plato.id}`} className="block">
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer h-[340px] flex flex-col">
+                    <div className="h-44 w-full overflow-hidden">
+                      <img
+                        src={plato.photos?.[0] || "/multimedia/Plato_Sin_Imagen.png"}
+                        alt={plato.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                    <p className="text-sm font-medium text-gray-300">{plato.city}</p>
-                    <p className="text-sm font-medium text-gray-300">${plato.price}</p>
+                    <div className="p-4 flex flex-col flex-1">
+                      <h3 className="text-lg font-bold text-gray-900 line-clamp-1"> {plato.name} </h3>
+                      <p className="text-sm text-gray-500 mt-1 line-clamp-1"> {plato.category} </p>
+                      <p className="text-sm font-semibold text-gray-700 mt-auto"> ${plato.price} </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </>

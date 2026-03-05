@@ -14,44 +14,44 @@ export default function Login() {
   const [name, setName] = useState("");
   const [vrLoginAlert, setVrLoginAlert] = useState(false);
   const [vrRegisterAlert, setVrRegisterAlert] = useState(false);
+  const [vrLoginErrorAlert, setVrLoginErrorAlert] = useState(false);
+  const [vrRegisterErrorAlert, setVrRegisterErrorAlert] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
   const router = useRouter();
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  const data = await login(loginUsername, loginPassword);
-  if (data?.token) {
-    setVrLoginAlert(true);
-    setTimeout(() => router.push('/home'), 1000);
-  }
-};
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await login(loginUsername, loginPassword);
+      if (data?.token) {
+        setVrLoginAlert(true);
+        setTimeout(() => router.push('/home'), 1000);
+      }
+    } catch {
+      setVrLoginErrorAlert(true);
+    }
+  };
 
-const handleRegistrar = async (e) => {
-  e.preventDefault();
-  const data = await register(username, name, password);
-  if (data?.token) {
-    setVrRegisterAlert(true);
-    setTimeout(() => router.push('/home'), 1000);
-  }
-};
+  const handleRegistrar = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await register(username, name, password);
+      if (data?.token) {
+        setVrRegisterAlert(true);
+        setTimeout(() => router.push('/home'), 1000);
+      }
+    } catch {
+      setVrRegisterErrorAlert(true);
+    }
+  };
 
   return (
     <>
-      <AlertMessage
-        show={vrLoginAlert}
-        onClose={() => setVrLoginAlert(false)}
-        variant="success"
-        message="Usuario logueado correctamente"
-        duration={5000}
-      />
-      <AlertMessage
-        show={vrRegisterAlert}
-        onClose={() => setVrRegisterAlert(false)}
-        variant="success"
-        message="Usuario registrado correctamente"
-        duration={5000}
-      />
+      <AlertMessage show={vrLoginErrorAlert} onClose={() => setVrLoginErrorAlert(false)} variant="danger" message="Usuario o contraseña incorrectos" duration={3000} />
+      <AlertMessage show={vrRegisterErrorAlert} onClose={() => setVrRegisterErrorAlert(false)} variant="danger" message="Error al registrarse" duration={3000} />
+      <AlertMessage show={vrLoginAlert} onClose={() => setVrLoginAlert(false)} variant="success" message="Usuario logueado correctamente" duration={5000} />
+      <AlertMessage show={vrRegisterAlert} onClose={() => setVrRegisterAlert(false)} variant="success" message="Usuario registrado correctamente" duration={5000} />
 
       <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8" style={{ backgroundColor: '#111827' }}>        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
@@ -101,9 +101,7 @@ const handleRegistrar = async (e) => {
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-400"
-                >
-                  Iniciar Sesión
-                </button>
+                > Iniciar Sesión </button>
               </div>
             </form>
           )}
@@ -157,24 +155,20 @@ const handleRegistrar = async (e) => {
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-400"
-                >
-                  Registrarse
-                </button>
+                > Registrarse </button>
               </div>
             </form>
           )}
 
           {/* Toggle entre login y registro */}
+          <br />
           <p className="mt-10 text-center text-sm text-gray-400">
             {showRegister ? "¿Ya tenés cuenta?" : "¿No tenés cuenta?"}{"  "}
             <button
               onClick={() => setShowRegister(!showRegister)}
               className="font-semibold text-indigo-400 hover:text-indigo-300 bg-transparent border-none cursor-pointer"
-            >
-              {showRegister ? "Iniciá sesión" : "Registrate"}
-            </button>
+            > {showRegister ? "Iniciá sesión" : "Registrate"} </button>
           </p>
-
         </div>
       </div>
     </>

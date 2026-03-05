@@ -27,12 +27,12 @@ export default function NavbarRutasSabor() {
             className="d-inline-block align-top"
           />
         </Navbar.Brand>
-        <Nav><h4>Rutas del Sabor</h4></Nav>
+        <Nav.Link href="/home" className="fw-bold fs-4"> Rutas del Sabor </Nav.Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/agregar-Platos-Page">Agregar Plato</Nav.Link>
-            <Nav.Link href="/agregar-Locales-Page">Agregar Local</Nav.Link>
+            <Nav.Link href="/agregar-Platos-Page"> Agregar Plato </Nav.Link>
+            <Nav.Link href="/agregar-Locales-Page"> Agregar Local </Nav.Link>
           </Nav>
 
           <Nav>
@@ -40,7 +40,7 @@ export default function NavbarRutasSabor() {
               <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-indigo-500 transition">
                 {inicial}
               </div>
-              <h6>Ver perfil</h6>
+              <h6> Ver perfil </h6>
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
