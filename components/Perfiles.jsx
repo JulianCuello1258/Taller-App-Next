@@ -15,17 +15,8 @@ export default function Perfiles() {
   const [platos, setPlatos] = useState([]);
   const [user, setUser] = useState({ name: "", username: "", email: "", role: "", bio: "" });
   const [editUser, setEditUser] = useState({ ...user });
-  const [userId, setUserId] = useState(null);
-  const [inicial, setInicial] = useState('?');
-
 
   useEffect(() => {
-    const localStorageUser = JSON.parse(localStorage.getItem("user"));
-    if (localStorageUser) {
-      setUserId(localStorageUser.id);
-      setInicial(localStorageUser.name?.charAt(0).toUpperCase() || '?');
-    }
-
     const fetchUser = async () => {
       const data = await getUser(params.id);
       const fetched = {
@@ -63,7 +54,7 @@ export default function Perfiles() {
           <div className="flex flex-col md:flex-row items-center gap-6">
 
             <div className="w-32 h-32 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm transition">
-              <h1>{inicial}</h1>
+              <h1>{user.name?.charAt(0).toUpperCase() || '?'}</h1>
             </div>
 
             <div className="flex-1 w-full">
